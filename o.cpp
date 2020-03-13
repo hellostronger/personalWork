@@ -59,4 +59,5 @@ int getnum_word(char f[]){
 			printf("%c",ch);
 		}
         return num;
+        666 
 } 
