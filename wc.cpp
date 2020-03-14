@@ -9,13 +9,12 @@ int main(int i,char *argv[]){
 	if(i!=3)
 	printf("命令错误");
 	else{
-	if(strcmp("-c",argv[1])==0){
-	printf("打印文件字符数"); 
-	printf("%s文件中的字符数为%d\n",argv[1], getnum_char(argv[2]));	
+	if(strcmp("-c",argv[1])==0){ 
+	printf("%s文件中的字符数为%d\n",argv[2], getnum_char(argv[2]));	
 	} 
 	if(strcmp("-w",argv[1])==0)
 	{
-		printf("单词数为%d\n",getnum_word(argv[2])); 
+		printf("%s文件中单词数为%d\n",argv[2],getnum_word(argv[2])); 
 	}
 	if(strcmp("-l",argv[1])==0){
 	printf("%s文件中的行数为%d\n",argv[2],getnum_row(argv[2]));
@@ -26,7 +25,7 @@ int main(int i,char *argv[]){
     zs = getnum_zhushirow(argv[2]);
     kh = getnum_null(argv[2]);
     dm = total - zs -kh;
-	printf("文件中的总行为%d\n",total);
+	printf("%s文件中的总行为%d\n",argv[2],total);
 	printf("文件中的注释行为%d\n",zs);
 	printf("文件中的空行为%d\n",kh) ;
 	printf("文件中的代码行为%d\n",dm) ;
@@ -41,7 +40,6 @@ int getnum_char(char f[]){
 		fp = fopen(f,"r");
 		while((ch=getc(fp))!=EOF){
 			num++;
-			printf("%c",ch);
 		}
         return num;
 	}
@@ -133,6 +131,8 @@ int getnum_zhushirow(char f[]){
 		if (flag == true)
 		j = true;	
 	}
+	if(hangzhushi)
+	num++;
 	return num;
 }
 
