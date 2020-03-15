@@ -1,41 +1,29 @@
 #include <stdio.h>
 #include <string.h>
-<<<<<<< HEAD
-=======
 #include <io.h>
 #include <string.h> 
 #include <stdlib.h>
 void search(char *path);
->>>>>>> 娣诲姞娴嬭瘯娉ㄩ噴
 int getnum_char(char f[]);
 int getnum_row(char f[]);
 int getnum_word(char f[]);
 int getnum_zhushirow(char f[]);
 int getnum_null(char f[]);
-<<<<<<< HEAD
-=======
 void  allinformation(char f[]);
->>>>>>> 娣诲姞娴嬭瘯娉ㄩ噴
 int main(int i,char *argv[]){
-	if(i!=3)
-	printf("命令错误");
-	else{
-<<<<<<< HEAD
-	if(strcmp("-c",argv[1])==0){
-	printf("打印文件字符数"); 
-	printf("%s文件中的字符数为%d\n",argv[1], getnum_char(argv[2]));	
-	} 
-	if(strcmp("-w",argv[1])==0)
-	{
-		printf("单词数为%d\n",getnum_word(argv[2])); 
-=======
+	if(i!=3&&i!=2)
+	printf("命令错误,格式wc.exe [parameter] [file_name]\n您可输入wc.exe -h 查看相关参数和帮助");
+	if(i == 2&&strcmp("-h",argv[1])==0){
+		printf(" -w   返回文件词的数目\n -l   返回文件的行数 \n -s  递归处理目录下符合条件的文件\n -a  返回文件详细信息"); 
+	}
+
+	else if(i == 3){
 	if(strcmp("-c",argv[1])==0){ 
 	printf("%s文件中的字符数为%d\n",argv[2], getnum_char(argv[2]));	
 	} 
 	if(strcmp("-w",argv[1])==0)
 	{
 		printf("%s文件中单词数为%d\n",argv[2],getnum_word(argv[2])); 
->>>>>>> 娣诲姞娴嬭瘯娉ㄩ噴
 	}
 	if(strcmp("-l",argv[1])==0){
 	printf("%s文件中的行数为%d\n",argv[2],getnum_row(argv[2]));
@@ -46,32 +34,19 @@ int main(int i,char *argv[]){
     zs = getnum_zhushirow(argv[2]);
     kh = getnum_null(argv[2]);
     dm = total - zs -kh;
-<<<<<<< HEAD
-	printf("文件中的总行为%d\n",total);
-=======
 	printf("%s文件中的总行为%d\n",argv[2],total);
->>>>>>> 娣诲姞娴嬭瘯娉ㄩ噴
 	printf("文件中的注释行为%d\n",zs);
 	printf("文件中的空行为%d\n",kh) ;
 	printf("文件中的代码行为%d\n",dm) ;
 	}
-<<<<<<< HEAD
-	return 0;
-	}
-} 
-int getnum_char(char f[]){
-		FILE *fp;
-		int ch;
-		int num = 0;
-		fp = fopen(f,"r");
-		while((ch=getc(fp))!=EOF){
-			num++;
-			printf("%c",ch);
-		}
-        return num;
-=======
 	if(strcmp("-s",argv[1])==0){
-    	search(argv[2]);
+		int i = 0;
+		char a[30] = {};
+		while(argv[2][i]!='.'&&argv[2][i+1] != 'c'){
+			a[i] = argv[2][i];
+			i++;
+		}
+		search(a);
 	}
 	return 0;
 	}
@@ -144,43 +119,10 @@ int getnum_char(char f[]){
 		num++;
 	}
     return num;
->>>>>>> 娣诲姞娴嬭瘯娉ㄩ噴
 	}
 	
 int getnum_row(char f[]){
 	FILE *fp;
-<<<<<<< HEAD
-	int  ch;
-	int num = 0;
-	fp = fopen(f,"r");
-	while((ch=getc(fp))!=EOF){
-	if((char)ch=='\n')
-	num++;
-	}
-	int g = 0;
-	if(getnum_word(f)>0){
-	num++;
-	} 
-    return num;
-} 
-
-int getnum_word(char f[]){
-		FILE *fp;
-		bool flag = true;
-		int  ch;
-		int num = 0;
-		fp = fopen(f,"r");
-		while((ch=getc(fp))!=EOF){
-			if(ch>='a'&&ch<='z'||ch<='Z'&&ch>='A'){
-				if(flag==true){
-					num++;
-					flag = false;
-				}	
-			}else{
-					flag = true;
-				}
-		}	
-=======
 	int num = 0;
 	fp = fopen(f,"r");
 	char a[100]={};
@@ -208,7 +150,6 @@ int getnum_word(char f[]){
 			flag = true;
 		}
 	}	
->>>>>>> 娣诲姞娴嬭瘯娉ㄩ噴
     return num;
 } 
 
@@ -264,11 +205,8 @@ int getnum_zhushirow(char f[]){
 		if (flag == true)
 		j = true;	
 	}
-<<<<<<< HEAD
-=======
 	if(hangzhushi)
 	num++;
->>>>>>> 娣诲姞娴嬭瘯娉ㄩ噴
 	return num;
 }
 
@@ -284,13 +222,8 @@ int getnum_null(char f[]){
 	num++;
 	}
 	return num;		
-<<<<<<< HEAD
-}	
-
-=======
 }
 
 
  
  
->>>>>>> 娣诲姞娴嬭瘯娉ㄩ噴
