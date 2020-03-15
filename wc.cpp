@@ -54,7 +54,7 @@ int main(int i,char *argv[]){
 	}
 } 
 
-void  allinformation(char f[]){
+void  allinformation(char f[]){//文件的更多注释 
 	int total,zs,kh,dm;  
 	printf("%s文件中的字符数为%d\n",f, getnum_char(f));	
 	printf("文件中单词数为%d\n",getnum_word(f)); 
@@ -70,7 +70,7 @@ void  allinformation(char f[]){
 	printf("文件中的代码行为%d\n",dm) ;
 }
 
-void search(char *path){
+void search(char *path){//找规定目录下.c文件 
 	struct _finddata_t data;
 	long hnd = _findfirst(path,&data);
 	if(hnd < 0 ){
@@ -83,7 +83,7 @@ void search(char *path){
 			nRet = _findnext(hnd,&data);
 			continue;
 		}
-		if(data.attrib == _A_SUBDIR){
+		if(data.attrib == _A_SUBDIR){//是目录 
 		nextpath = (char *) malloc ((strlen(path)+strlen(data.name))*sizeof(char));
 		char *path2 = (char *) malloc (strlen(path)*sizeof(char));
 		for(int i=0;i<strlen(path)-1;i++)
@@ -91,7 +91,7 @@ void search(char *path){
 		sprintf(nextpath,"%s%s\\*",path2,data.name);
 		free(path2);
 		search(nextpath);
-		}else{
+		}else{//是文件 
 		for (int i=0;i<strlen(data.name);i++){
 			if(data.name[i]=='.'&&data.name[i+1]=='c'){
 			char *path3 = (char *) malloc((strlen(path))*sizeof(char));
@@ -100,7 +100,7 @@ void search(char *path){
 				path3[i] = path[i];
 			}
 			char *filepath = (char *) malloc ((strlen(path3)+strlen(data.name)+2)*sizeof(char));
-			sprintf(filepath,"%s%s",path3,data.name);
+			sprintf(filepath,"%s%s",path3,data.name);//拼接.c文件的路径 
 			allinformation(filepath);
 			free(filepath);
 			free(path3);
@@ -113,7 +113,7 @@ void search(char *path){
 	_findclose(hnd);	
 }
 
-int getnum_char(char f[]){
+int getnum_char(char f[]){//求显示字符数 
 	FILE *fp;
 	char ch;
 	int num = 0;
@@ -131,7 +131,7 @@ int getnum_char(char f[]){
     return num;
 }
 	
-int getnum_row(char f[]){
+int getnum_row(char f[]){//总行 
 	FILE *fp;
 	int num = 0;
 	fp = fopen(f,"r");
@@ -154,7 +154,7 @@ int getnum_row(char f[]){
 }
 
 
-int getnum_word(char f[]){
+int getnum_word(char f[]){//求词数 
 	FILE *fp;
 	bool flag = true;
 	int  ch;
@@ -175,7 +175,7 @@ int getnum_word(char f[]){
 } 
 
   
-int getnum_zhushirow(char f[]){
+int getnum_zhushirow(char f[]){//求注释行 
 	bool tag = true;
 	bool j = false;
 	bool end_tag = false;
@@ -226,7 +226,7 @@ int getnum_zhushirow(char f[]){
 		if (flag == true)
 		j = true;	
 	}
-	if(hangzhushi)
+	if(hangzhushi)//最后一行注释 
 	num++;
 	dh = delet(f);
 	fclose(fp);
@@ -235,7 +235,7 @@ int getnum_zhushirow(char f[]){
 }
 
 
-int getnum_null(char f[]){
+int getnum_null(char f[]){//求空行 
 	int num=0;
 	FILE *fp;
 	if(fp==NULL){
@@ -247,11 +247,11 @@ int getnum_null(char f[]){
 	if(getnum_char(f)>0){
 	while(!feof(fp)){
 	fgets(a,100,fp);
-	if(a[0]=='\n'||(a[0]=='}'&&a[2]!='/')||(a[0]=='{'&&strlen(a)==2)){
+	if(a[0]=='\n'||(a[0]=='}'&&a[2]!='/')||(a[0]=='{'&&strlen(a)==2)){//空行情况 
 		num++;	
 	}
 	}
-	if(strlen(a)==2&&a[0]=='}')
+	if(strlen(a)==2&&a[0]=='}')//degbug发现最后没注释时候重复输出，最后作此操作 
 	num--;
 }
 	fclose(fp);
@@ -271,7 +271,7 @@ int delet(char f[]){
 	while(!feof(fp)){
 	fgets(a,100,fp);
 	for(int i=0;i<strlen(a)-1;i++){
-		if(a[i]=='/'&&a[i+1]=='/'){
+		if(a[i]=='/'&&a[i+1]=='/'){//即求跟在代码后面行注释 
 			if(i>=2)
 			num++;
 		}
