@@ -2,7 +2,9 @@
 #include <string.h>
 #include <io.h>
 #include <string.h> 
+#include <ctype.h>
 #include <stdlib.h>
+int delet(char f[]);
 void search(char *path);
 int getnum_char(char f[]);
 int getnum_row(char f[]);
@@ -14,7 +16,7 @@ int main(int i,char *argv[]){
 	if(i!=3&&i!=2)
 	printf("命令错误,格式wc.exe [parameter] [file_name]\n您可输入wc.exe -h 查看相关参数和帮助");
 	if(i == 2&&strcmp("-h",argv[1])==0){
-		printf(" -w   返回文件词的数目\n -l   返回文件的行数 \n -s  递归处理目录下符合条件的文件\n -a  返回文件详细信息"); 
+		printf(" -w 返回文件词的数目\n -c 返回文件字符数\n -l 返回文件的行数 \n -s 递归处理目录下符合条件的.c文件\n -a 返回文件详细信息"); 
 	}
 
 	else if(i == 3){
@@ -61,6 +63,7 @@ void  allinformation(char f[]){
     zs = getnum_zhushirow(f);
     kh = getnum_null(f);
     dm = total - zs -kh;
+    
 	printf("文件中的总行为%d\n",total);
 	printf("文件中的注释行为%d\n",zs);
 	printf("文件中的空行为%d\n",kh) ;
@@ -112,25 +115,42 @@ void search(char *path){
 
 int getnum_char(char f[]){
 	FILE *fp;
-	int ch;
+	char ch;
 	int num = 0;
 	fp = fopen(f,"r");
+	if(fp==NULL){
+		printf("文件读取失败");
+		return -1; 
+	}
 	while((ch=getc(fp))!=EOF){
-		num++;
+		if(!isspace(ch)){//把空白符去掉 
+			num++;
+		}
 	}
+	fclose(fp);
     return num;
-	}
+}
 	
 int getnum_row(char f[]){
 	FILE *fp;
 	int num = 0;
 	fp = fopen(f,"r");
+	if(fp==NULL){
+		printf("文件读取失败");
+		return -1; 
+	}
+	if(getnum_char(f)<=0){
+		fclose(fp);
+		return 0;
+	}else{
 	char a[100]={};
 	while(!feof(fp)){
 	fgets(a,100,fp);
 	num++;
 	}
-    return num-1; 
+	fclose(fp);
+	return num-1; 
+	}
 }
 
 
@@ -141,7 +161,7 @@ int getnum_word(char f[]){
 	int num = 0;
 	fp = fopen(f,"r");
 	while((ch=getc(fp))!=EOF){
-		if(ch>='a'&&ch<='z'||ch<='Z'&&ch>='A'){
+		if((ch>='a'&&ch<='z')||(ch<='Z'&&ch>='A')||(ch>='0'&&ch<='9'||ch=='_')){
 			if(flag==true){
 			num++;
 			flag = false;
@@ -149,7 +169,8 @@ int getnum_word(char f[]){
 		}else{
 			flag = true;
 		}
-	}	
+	}
+	fclose(fp);	
     return num;
 } 
 
@@ -159,7 +180,7 @@ int getnum_zhushirow(char f[]){
 	bool j = false;
 	bool end_tag = false;
 	FILE *fp;
-	int  ch;
+	int  ch,dh;
 	bool flag = false;
 	bool duanzhushi = false; 
 	bool hangzhushi = false;
@@ -207,6 +228,9 @@ int getnum_zhushirow(char f[]){
 	}
 	if(hangzhushi)
 	num++;
+	dh = delet(f);
+	fclose(fp);
+	return num-dh;
 	return num;
 }
 
@@ -214,15 +238,51 @@ int getnum_zhushirow(char f[]){
 int getnum_null(char f[]){
 	int num=0;
 	FILE *fp;
+	if(fp==NULL){
+	printf("文件读取失败");
+	return -1; 
+	}
 	fp = fopen(f,"r");
-	char a[100]={};
+	char a[100];
+	if(getnum_char(f)>0){
 	while(!feof(fp)){
 	fgets(a,100,fp);
-	if(a[0]=='\n')
-	num++;
+	if(a[0]=='\n'||(a[0]=='}'&&a[2]!='/')||(a[0]=='{'&&strlen(a)==2)){
+		num++;	
 	}
+	}
+	if(strlen(a)==2&&a[0]=='}')
+	num--;
+}
+	fclose(fp);
 	return num;		
 }
+
+int delet(char f[]){
+	int num=0;
+	FILE *fp;
+	if(fp==NULL){
+	printf("文件读取失败");
+	return -1; 
+	}
+	fp = fopen(f,"r");
+	char a[100];
+	if(getnum_char(f)>0){
+	while(!feof(fp)){
+	fgets(a,100,fp);
+	for(int i=0;i<strlen(a)-1;i++){
+		if(a[i]=='/'&&a[i+1]=='/'){
+			if(i>=2)
+			num++;
+		}
+	}
+}
+}
+	fclose(fp);
+	return num;	
+}
+
+
 
 
  
